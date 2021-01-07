@@ -1,6 +1,35 @@
 export const CHECK_COIN = "CHECK_COIN";
+const ADD_COIN = "ADD_COIN";
 
-export const checkCoin = (strCoin) => ({
+const initialState = {
+  coins: {},
+};
+
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_COIN:
+      const { symbol, token } = action;
+      console.log("ADD COIN Reducer " + symbol + " " + token);
+      return {
+        ...state,
+        coins: {
+          ...state.coins,
+          [symbol]: token,
+        },
+      };
+    default:
+      return state;
+  }
+};
+
+export const checkCoin = (symbol, token) => ({
   type: CHECK_COIN,
-  payload: strCoin,
+  symbol,
+  token,
+});
+
+export const addCoin = (symbol, token) => ({
+  type: ADD_COIN,
+  symbol,
+  token,
 });

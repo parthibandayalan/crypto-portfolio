@@ -10,16 +10,15 @@ import store from "./redux/ConfigureStore";
 const theme = createMuiTheme();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <MuiThemeProvider theme={theme}>
-        <App />
-      </MuiThemeProvider>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <MuiThemeProvider theme={theme}>
+      <App />
+    </MuiThemeProvider>
+  </Provider>,
   document.getElementById("root")
 );
-
+//Strict mode removed
+//<React.StrictMode> </React.StrictMode>
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

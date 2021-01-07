@@ -1,5 +1,4 @@
 import "./App.css";
-import CryptoChart from "./components/CryptoChart";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import ErrorPage from "./pages/ErrorPage";
