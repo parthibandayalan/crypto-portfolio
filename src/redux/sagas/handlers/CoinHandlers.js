@@ -2,6 +2,7 @@ import { setSnackbar } from "../../ducks/Snackbar";
 import { addCoin } from "../../ducks/CoinDucks";
 import { call, put } from "redux-saga/effects";
 import { checkSymbol } from "../../../services/CoinMarketApiService";
+import checkSymbolBinanceApi from "../requests/CoinRequest";
 
 export function* handleCheckCoin(action) {
   //yield put(setSnackbar(true, "success", "Your coin is added"));
@@ -14,12 +15,13 @@ export function* handleCheckCoin(action) {
     if (isNaN(token) || Number(token) < 0) {
       throw "Enter Valid Number";
     }
-    const response = yield call(checkSymbol, symbol);
-    console.log("Response : " + JSON.stringify(response));
+    //const response = yield call(checkSymbol, symbol);
+    yield call(checkSymbolBinanceApi, symbol);
+    //console.log("Response : " + JSON.stringify(response));
     yield put(addCoin(symbol, token));
     yield put(setSnackbar(true, "success", "Your coin is added"));
   } catch (error) {
-    console.log("error while launching set snack bar action" + error);
+    console.log(error);
     yield put(setSnackbar(true, "error", JSON.stringify(error)));
   }
 }

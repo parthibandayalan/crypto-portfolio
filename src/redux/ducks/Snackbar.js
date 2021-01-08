@@ -10,14 +10,14 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SNACKBAR:
       const { snackbarOpen, snackbarMessage, snackbarType } = action;
-      console.log(
+      /*console.log(
         "SET SNACKBAR Reducer" +
           snackbarOpen +
           " " +
           snackbarMessage +
           " " +
           snackbarType
-      );
+      );*/
       return {
         ...state,
         snackbarOpen,

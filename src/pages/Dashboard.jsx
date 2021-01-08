@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import {
@@ -17,9 +17,11 @@ import {
 } from "@material-ui/core";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useHistory, Switch } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import CryptoChart from "../components/CryptoChart";
 import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
+import LightChart from "./../components/LightChartComponent";
 
 const drawerWidth = 240;
 const appBarHeight = 64;
@@ -94,15 +96,10 @@ export default function Dashboard({ match }) {
   const history = useHistory();
   const classes = useStyles();
 
+  const [items, setItems] = useState([]);
+  const coins = useSelector((state) => state.coins.coins);
+
   const itemsList = [
-    {
-      text: "BTC-USD",
-      onClick: () =>
-        history.push({
-          pathname: "/chart",
-          state: { coinCode: "BTC" },
-        }),
-    },
     {
       text: "ETH-USD",
       onClick: () =>
@@ -112,6 +109,18 @@ export default function Dashboard({ match }) {
         }),
     },
   ];
+
+  for (const [key, value] of Object.entries(coins)) {
+    let eachItem = {
+      text: key + "-USD",
+      onClick: () =>
+        history.push({
+          pathname: "/chart",
+          state: { coinCode: key },
+        }),
+    };
+    itemsList.push(eachItem);
+  }
 
   const handleLogout = () => {};
 
@@ -167,12 +176,30 @@ export default function Dashboard({ match }) {
                 </ListItemIcon>
                 <ListItemText primary="Add Coin" />
               </ListItem>
+              <Divider />
+              <ListItem
+                button
+                key="lightchart"
+                onClick={() => history.push("/lightchart")}
+              >
+                <ListItemIcon>
+                  <MonetizationOnIcon />
+                </ListItemIcon>
+                <ListItemText primary="Light Chart" />
+              </ListItem>
             </Drawer>
           </Box>
           <Box className={classes.content}>
             <Switch>
               <Route exact path={match.url + `chart`} component={CryptoChart}>
                 <CryptoChart />
+              </Route>
+              <Route
+                exact
+                path={match.url + `lightchart`}
+                component={LightChart}
+              >
+                <LightChart />
               </Route>
               <Route exact path={match.url + `addcoin`} component={AddCoin}>
                 <AddCoin />

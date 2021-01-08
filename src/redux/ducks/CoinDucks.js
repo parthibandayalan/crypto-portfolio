@@ -8,8 +8,11 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case ADD_COIN:
-      const { symbol, token } = action;
-      console.log("ADD COIN Reducer " + symbol + " " + token);
+      let { symbol, token } = action;
+      //console.log("ADD COIN Reducer " + symbol + " " + token);
+      if (symbol in state.coins) {
+        token = Number(token) + Number(state.coins[symbol]);
+      }
       return {
         ...state,
         coins: {

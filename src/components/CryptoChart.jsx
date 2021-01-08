@@ -136,10 +136,11 @@ class CryptoChart extends Component {
 
     this.ws.onmessage = (e) => {
       const value = JSON.parse(e.data);
+      console.log("value : " + JSON.stringify(value));
       if (value.type !== "ticker" || value.product_id !== this.state.pairing) {
         return;
       }
-      console.log("value : " + JSON.stringify(value));
+      //console.log("value : " + JSON.stringify(value));
       const oldBtcDataSet = this.state.lineChartData.datasets[0];
       const newBtcDataSet = { ...oldBtcDataSet };
       newBtcDataSet.data.push(value.price);
