@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Chart from "kaktana-react-lightweight-charts";
+import getHistoricalData from "./../services/BinanceHistoryDataAPI";
+import { useLocation } from "react-router-dom";
 
 export default function LightChartComponent() {
   // URL connection
@@ -8,11 +10,8 @@ export default function LightChartComponent() {
   );*/
 
   // Or Subscribe method
-  const subscribe = {
-    method: "subscribe",
-    topic: "kline_1h",
-    symbols: ["BNB_BTCB-1DE"],
-  };
+
+  const location = useLocation();
 
   const options = {
     alignLabels: true,
@@ -30,116 +29,109 @@ export default function LightChartComponent() {
     },
   };
 
-  const conn = new WebSocket(
-    "wss://stream.binance.com:9443/ws/btcusdt@kline_1m"
-  );
-  /*conn.onopen = () => {
-    conn.send(JSON.stringify(subscribe));
-    console.log(" subscribe send : " + JSON.stringify(subscribe));
-  };*/
-  conn.onmessage = (e) => {
-    console.log("value : " + JSON.stringify(e.data));
-  };
-
-  const candlestickSeries = [
+  const [lineSeries, setLineSeries] = useState([
     {
-      data: [
-        {
+      data: [],
+    },
+  ]);
+
+  /////below code is for getting historical data and setting up the lineSeries data
+  /* {
           time: "2018-10-19",
-          open: 180.34,
-          high: 180.99,
-          low: 178.57,
-          close: 179.85,
+          value: 180.34,
         },
         {
           time: "2018-10-22",
-          open: 180.82,
-          high: 181.4,
-          low: 177.56,
-          close: 178.75,
+          value: 180.82,
         },
         {
           time: "2018-10-23",
-          open: 175.77,
-          high: 179.49,
-          low: 175.44,
-          close: 178.53,
+          value: 175.77,
         },
         {
           time: "2018-10-24",
-          open: 178.58,
-          high: 182.37,
-          low: 176.31,
-          close: 176.97,
+          value: 178.58,
         },
         {
           time: "2018-10-25",
-          open: 177.52,
-          high: 180.5,
-          low: 176.83,
-          close: 179.07,
+          value: 177.52,
         },
         {
           time: "2018-10-26",
-          open: 176.88,
-          high: 177.34,
-          low: 170.91,
-          close: 172.23,
+          value: 176.88,
         },
         {
           time: "2018-10-29",
-          open: 173.74,
-          high: 175.99,
-          low: 170.95,
-          close: 173.2,
+          value: 173.74,
         },
         {
           time: "2018-10-30",
-          open: 173.16,
-          high: 176.43,
-          low: 172.64,
-          close: 176.24,
+          value: 173.16,
         },
         {
           time: "2018-10-31",
-          open: 177.98,
-          high: 178.85,
-          low: 175.59,
-          close: 175.88,
+          value: 177.98,
         },
-        {
-          time: "2018-11-01",
-          open: 176.84,
-          high: 180.86,
-          low: 175.9,
-          close: 180.46,
-        },
-        {
-          time: "2018-11-02",
-          open: 182.47,
-          high: 183.01,
-          low: 177.39,
-          close: 179.93,
-        },
-        {
-          time: "2018-11-05",
-          open: 181.02,
-          high: 182.41,
-          low: 179.3,
-          close: 182.19,
-        },
-      ],
+        const lineSeries = [
+    {
+      data: [],
     },
-  ];
+  ];*/
+
+  useEffect(() => {
+    //lineSeries[0]["data"].push(incomingData);
+    // console.log(
+    //   lineSeries[0]["data"].push({ time: "2018-11-01", value: 180.98 })
+    // );
+    getHistoricalData(location.state.coinCode)
+      .then((incD) => {
+        //console.log("received by the component : " + JSON.stringify(incD));
+        //setIncomingData(incD);
+        const oldLineData = lineSeries[0]["data"];
+        const newLineSeries = [
+          {
+            data: [...oldLineData, ...incD],
+          },
+        ];
+        setLineSeries(newLineSeries);
+        //console.log("received by the component : ");
+        //console.log(newLineSeries);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }, [location.state.coinCode]);
+
+  //////////below code is for websocket
+  const API_WS =
+    "wss://stream.binance.com:9443/ws/" +
+    location.state.coinCode +
+    "usdt@kline_10m";
+  const conn = new WebSocket(API_WS);
+
+  conn.onmessage = (e) => {
+    console.log("value : ");
+    console.log(e.data);
+    var newKlineMap = JSON.parse(e.data);
+    const newPoint = {
+      time: newKlineMap.k.t / 1000,
+      value: parseFloat(newKlineMap.k.o),
+    };
+
+    //console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
+    //console.log("Value : " + newPoint.value);
+    const oldLineData = lineSeries[0]["data"];
+    const newLineSeries = [
+      {
+        data: [...oldLineData, newPoint],
+      },
+    ];
+    setLineSeries(newLineSeries);
+  };
 
   return (
     <div>
-      <Chart
-        options={options}
-        candlestickSeries={candlestickSeries}
-        autoWidth
-        height={800}
-      />
+      <Chart options={options} lineSeries={lineSeries} autoWidth height={800} />
     </div>
   );
 }

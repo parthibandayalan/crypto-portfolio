@@ -99,12 +99,14 @@ export default function Dashboard({ match }) {
   const [items, setItems] = useState([]);
   const coins = useSelector((state) => state.coins.coins);
 
+  const [isLoggedIn, setLogged] = useState(true);
+
   const itemsList = [
     {
       text: "ETH-USD",
       onClick: () =>
         history.push({
-          pathname: "/chart",
+          pathname: "/lightchart",
           state: { coinCode: "ETH" },
         }),
     },
@@ -115,7 +117,7 @@ export default function Dashboard({ match }) {
       text: key + "-USD",
       onClick: () =>
         history.push({
-          pathname: "/chart",
+          pathname: "/lightchart",
           state: { coinCode: key },
         }),
     };
@@ -133,9 +135,16 @@ export default function Dashboard({ match }) {
               <Typography variant="h6" className={classes.title} align="center">
                 Crypto Portfolio
               </Typography>
-              <Button color="inherit" onClick={handleLogout}>
-                Log Out
-              </Button>
+              {isLoggedIn && (
+                <Button color="inherit" onClick={handleLogout}>
+                  Log Out
+                </Button>
+              )}
+              {!isLoggedIn && (
+                <Button color="inherit" onClick={handleLogout}>
+                  Log In
+                </Button>
+              )}
             </Toolbar>
           </AppBar>
         </Box>
@@ -180,7 +189,12 @@ export default function Dashboard({ match }) {
               <ListItem
                 button
                 key="lightchart"
-                onClick={() => history.push("/lightchart")}
+                onClick={() =>
+                  history.push({
+                    pathname: "/lightchart",
+                    state: { coinCode: "ETH" },
+                  })
+                }
               >
                 <ListItemIcon>
                   <MonetizationOnIcon />

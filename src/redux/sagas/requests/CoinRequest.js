@@ -1,12 +1,7 @@
 import { CoinbasePro } from "coinbase-pro-node";
 import Binance from "node-binance-api";
 
-export default async function checkSymbolBinanceApi(symbol) {
-  const binance = new Binance().options({
-    APIKEY: "l9rBENLLTmWOxhaZhXZumkvXaUZM6h768c28nZYzaIT7mAbe2mC72FpkU67uMO4K",
-    APISECRET:
-      "sthlXgSGMOImGSRpM3Q7lWq6H3jh5hJnPYKwuUMqT3fXrta5AhyYLXB122dotvRf",
-  });
+/*export default async function checkSymbolBinanceApi(symbol) {
   const pairing = symbol + "USDT";
 
   try {
@@ -24,7 +19,7 @@ export default async function checkSymbolBinanceApi(symbol) {
   //     }});
 }
 
-/*export default function checkSymbolWebSocket(symbol) {
+export default function checkSymbolWebSocket(symbol) {
   //const {CoinbasePro} = require('coinbase-pro-node');
 
   const auth = {
