@@ -1,6 +1,7 @@
 import { combineReducers, createStore, applyMiddleware } from "redux";
 import snackbarReducer from "./ducks/Snackbar";
 import coinReducer from "./ducks/CoinDucks";
+import authReducer from "./ducks/Authentication";
 import createSagaMiddleware from "redux-saga";
 import { watcherSaga } from "./sagas/rootSaga";
 import logger from "redux-logger";
@@ -31,6 +32,7 @@ const persistedState = loadFromLocalStorage();
 const rootReducer = combineReducers({
   snackbar: snackbarReducer,
   coins: coinReducer,
+  auth: authReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

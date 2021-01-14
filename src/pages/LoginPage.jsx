@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-//import { loginUser } from "../../redux/ducks/authentication";
+import { loginUser } from "../redux/ducks/Authentication";
 import {
   Card,
   CardContent,
@@ -38,16 +38,16 @@ export default function LoginPage() {
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
-  //const auth = useSelector((state) => state.auth.authenticated);
+  const auth = useSelector((state) => state.auth.authenticated);
 
-  // useEffect(() => {
-  //   console.log("use effect : " + auth);
-  //   if (auth) history.push("/");
-  //   else {
-  //     errorVisible = true;
-  //     console.log("value changed: " + errorVisible);
-  //   }
-  // }, [auth]);
+  useEffect(() => {
+    console.log("use effect : " + auth);
+    if (auth) history.push("/");
+    else {
+      errorVisible = true;
+      console.log("value changed: " + errorVisible);
+    }
+  }, [auth]);
 
   //console.log(classes);
 
@@ -72,10 +72,10 @@ export default function LoginPage() {
             onSubmit={(values, formikHelpers) => {
               console.log("Submition Done");
               console.log(values);
-              //dispatch(loginUser(values)).then(() => history.push("/") );
-              //dispatch(loginUser(values));
+              dispatch(loginUser(values)).then(() => history.push("/"));
+              dispatch(loginUser(values));
               errorVisible = true;
-              //console.log("dispatch done outside :" + auth);
+              console.log("dispatch done outside :" + auth);
             }}
           >
             {({ values, errors, isSubmitting, isValidating }) => (
@@ -124,9 +124,9 @@ export default function LoginPage() {
                       <ErrorMessage name="password" />
                     </Grid>
                     <Grid item>
-                      {/* {!auth && errorVisible && (
+                      {!auth && errorVisible && (
                         <div>Invalid Username or password</div>
-                      )} */}
+                      )}
                     </Grid>
                     <Grid item>
                       <Box marginBottom={2}>
