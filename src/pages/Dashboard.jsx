@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import {
@@ -99,30 +99,26 @@ export default function Dashboard({ match }) {
   const [items, setItems] = useState([]);
   const coins = useSelector((state) => state.coins.coins);
 
-  const [isLoggedIn, setLogged] = useState(true);
+  const nameofUser = useSelector((state) => state.auth.name);
 
-  const itemsList = [
-    {
-      text: "ETH-USD",
-      onClick: () =>
-        history.push({
-          pathname: "/lightchart",
-          state: { coinCode: "ETH" },
-        }),
-    },
-  ];
+  const isLoggedIn = useSelector((state) => state.auth.authenticated);
 
-  for (const [key, value] of Object.entries(coins)) {
-    let eachItem = {
-      text: key + "-USD",
-      onClick: () =>
-        history.push({
-          pathname: "/lightchart",
-          state: { coinCode: key },
-        }),
-    };
-    itemsList.push(eachItem);
-  }
+  var itemsList = [];
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(coins)) {
+      let eachItem = {
+        text: key + "-USD",
+        onClick: () =>
+          history.push({
+            pathname: "/lightchart",
+            state: { coinCode: key },
+          }),
+      };
+      itemsList = [];
+      itemsList.push(eachItem);
+    }
+  }, [coins]);
 
   const handleLogout = () => {};
 
@@ -132,6 +128,11 @@ export default function Dashboard({ match }) {
         <Box className={classes.blockBox}>
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
+              {isLoggedIn && (
+                <Typography variant="h6" className={classes.title} align="left">
+                  {nameofUser}
+                </Typography>
+              )}
               <Typography variant="h6" className={classes.title} align="center">
                 Crypto Portfolio
               </Typography>
@@ -141,7 +142,12 @@ export default function Dashboard({ match }) {
                 </Button>
               )}
               {!isLoggedIn && (
-                <Button color="inherit" onClick={handleLogout}>
+                <Button
+                  color="inherit"
+                  onClick={() => {
+                    history.push("/login");
+                  }}
+                >
                   Log In
                 </Button>
               )}
@@ -162,17 +168,26 @@ export default function Dashboard({ match }) {
               </div>
               <Divider />
               <List>
-                {itemsList.map((item, index) => {
-                  const { text, icon, onClick } = item;
-                  return (
-                    <ListItem button key={text} onClick={onClick}>
-                      <ListItemIcon>
-                        <MonetizationOnIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItem>
-                  );
-                })}
+                {itemsList.length > 0 &&
+                  itemsList.map((item, index) => {
+                    const { text, icon, onClick } = item;
+                    return (
+                      <ListItem button key={text} onClick={onClick}>
+                        <ListItemIcon>
+                          <MonetizationOnIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
+                      </ListItem>
+                    );
+                  })}
+                {itemsList.length <= 0 && (
+                  <ListItem button>
+                    <ListItemIcon>
+                      <MonetizationOnIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="No Coins Added" />
+                  </ListItem>
+                )}
               </List>
               <Divider />
               <ListItem

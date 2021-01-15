@@ -1,9 +1,8 @@
 import { setSnackbar } from "../../ducks/Snackbar";
 import { addCoin } from "../../ducks/CoinDucks";
 import { call, put } from "redux-saga/effects";
-import { checkSymbol } from "../../../services/CoinMarketApiService";
-import checkSymbolBinanceApi from "../requests/CoinRequest";
 import getHistoricalData from "../../../services/BinanceHistoryDataAPI";
+import { addCoinToDb } from "../../../services/PortfolioServices";
 
 export function* handleCheckCoin(action) {
   //yield put(setSnackbar(true, "success", "Your coin is added"));
@@ -20,6 +19,20 @@ export function* handleCheckCoin(action) {
     //yield call(checkSymbolBinanceApi, symbol);
     yield call(getHistoricalData, symbol);
     //console.log("Response : " + JSON.stringify(response));
+    const serializedState = localStorage.getItem("state");
+    if (serializedState != null) {
+      const state = JSON.parse(serializedState);
+      console.log("Local Storage : " + JSON.stringify(state.auth.username));
+      const payload = {
+        coin: symbol,
+        tokens: token,
+        username: state.auth.username,
+      };
+      if (state.auth.authenticated) {
+        yield call(addCoinToDb, payload);
+      }
+    }
+
     yield put(addCoin(symbol, token));
     yield put(setSnackbar(true, "success", "Your coin is added"));
   } catch (error) {

@@ -103,6 +103,7 @@ export default function LightChartComponent() {
   }, [location.state.coinCode]);
 
   //////////below code is for websocket
+
   const API_WS =
     "wss://stream.binance.com:9443/ws/" +
     location.state.coinCode +
@@ -118,8 +119,8 @@ export default function LightChartComponent() {
       value: parseFloat(newKlineMap.k.o),
     };
 
-    //console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
-    //console.log("Value : " + newPoint.value);
+    console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
+    console.log("Value : " + newPoint.value);
     const oldLineData = lineSeries[0]["data"];
     const newLineSeries = [
       {
