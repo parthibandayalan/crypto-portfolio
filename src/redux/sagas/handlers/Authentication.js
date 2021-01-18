@@ -70,13 +70,12 @@ export function* handleLogoutUser(action) {
   try {
     const response = yield call(cancelToken);
     console.log("handler caught response : " + JSON.stringify(response));
-    let authentication = false;
-    localStorage.setItem("username", null);
     //const { authentication } = response;
-    yield put(setAuthenticated(authentication));
+    yield put(setAuthenticated(false, null, null));
+    yield put(setSnackbar(true, "success", "Log Out Successful"));
   } catch (error) {
-    let authentication = false;
-    yield put(setAuthenticated(authentication));
+    yield put(setAuthenticated(false, null, null));
+    yield put(setSnackbar(true, "success", "Log Out Successful"));
     //console.log(error);
   }
 }

@@ -6,9 +6,11 @@ export default async function getHistoricalData(symbol) {
   //https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=1000
   //axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-  axios.defaults.withCredentials = false;
+  const instance = axios.create({
+    baseURL: "http://localhost:8080",
+  });
 
-  return axios
+  return instance
     .get(`https://api.binance.com/api/v3/klines`, {
       params: { symbol: pairing, interval: "1d", limit: 1000 },
     })

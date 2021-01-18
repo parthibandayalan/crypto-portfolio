@@ -2,7 +2,7 @@ export const CHECK_COIN = "CHECK_COIN";
 const ADD_COIN = "ADD_COIN";
 
 const initialState = {
-  coins: {},
+  coins: [],
 };
 
 export default (state = initialState, action) => {
@@ -13,12 +13,10 @@ export default (state = initialState, action) => {
       if (symbol in state.coins) {
         token = Number(token) + Number(state.coins[symbol]);
       }
+      state.coins = [...state.coins, { symbol, token }];
       return {
         ...state,
-        coins: {
-          ...state.coins,
-          [symbol]: token,
-        },
+        coins: [...state.coins],
       };
     default:
       return state;

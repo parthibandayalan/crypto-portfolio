@@ -70,12 +70,12 @@ export default function LoginPage() {
               password: Yup.string().required("Password is required"),
             })}
             onSubmit={(values, formikHelpers) => {
-              console.log("Submition Done");
-              console.log(values);
+              // console.log("Submition Done");
+              // console.log(values);
               dispatch(loginUser(values)).then(() => history.push("/"));
               //dispatch(loginUser(values));
-              errorVisible = true;
-              console.log("dispatch done outside :" + auth);
+              // errorVisible = true;
+              // console.log("dispatch done outside :" + auth);
             }}
           >
             {({ values, errors, isSubmitting, isValidating }) => (

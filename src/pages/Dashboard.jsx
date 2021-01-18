@@ -22,6 +22,7 @@ import CryptoChart from "../components/CryptoChart";
 import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
 import LightChart from "./../components/LightChartComponent";
+import { logoutUser } from "../redux/ducks/Authentication";
 
 const drawerWidth = 240;
 const appBarHeight = 64;
@@ -100,27 +101,32 @@ export default function Dashboard({ match }) {
   const coins = useSelector((state) => state.coins.coins);
 
   const nameofUser = useSelector((state) => state.auth.name);
+  const username = useSelector((state) => state.auth.username);
 
   const isLoggedIn = useSelector((state) => state.auth.authenticated);
-
-  var itemsList = [];
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    for (const [key, value] of Object.entries(coins)) {
+    let itemsList = [];
+    for (var coin of coins) {
+      //console.log({ symbol, token });
       let eachItem = {
-        text: key + "-USD",
+        text: coin.symbol + "-USD",
         onClick: () =>
           history.push({
             pathname: "/lightchart",
-            state: { coinCode: key },
+            state: { coinCode: coin.symbol, noOfTokens: coin.token },
           }),
       };
-      itemsList = [];
       itemsList.push(eachItem);
     }
-  }, [coins]);
+    setItems(itemsList);
+    console.log("use effect executed" + JSON.stringify(coins));
+  }, [coins.length]);
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    dispatch(logoutUser);
+  };
 
   return (
     <div>
@@ -137,7 +143,7 @@ export default function Dashboard({ match }) {
                 Crypto Portfolio
               </Typography>
               {isLoggedIn && (
-                <Button color="inherit" onClick={handleLogout}>
+                <Button color="inherit" onClick={() => dispatch(logoutUser())}>
                   Log Out
                 </Button>
               )}
@@ -168,8 +174,8 @@ export default function Dashboard({ match }) {
               </div>
               <Divider />
               <List>
-                {itemsList.length > 0 &&
-                  itemsList.map((item, index) => {
+                {items.length > 0 &&
+                  items.map((item, index) => {
                     const { text, icon, onClick } = item;
                     return (
                       <ListItem button key={text} onClick={onClick}>
@@ -180,7 +186,7 @@ export default function Dashboard({ match }) {
                       </ListItem>
                     );
                   })}
-                {itemsList.length <= 0 && (
+                {items.length <= 0 && (
                   <ListItem button>
                     <ListItemIcon>
                       <MonetizationOnIcon />

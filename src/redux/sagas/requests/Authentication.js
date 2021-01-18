@@ -28,19 +28,25 @@ export function authenticateUser(values) {
   //return { status: 200 };
 }
 
-export function refreshToken() {
+export function refreshToken(values) {
   //axios.defaults.withCredentials = true;
-  return axios.request({
+  instance.defaults.withCredentials = true;
+  // let payload = { username: values.username, password: values.password };
+  return instance.request({
     method: "POST",
+    // data: payload,
     url: `${API_URL}/refreshtoken`,
   });
   //return { status: 200 };
 }
 
-export function cancelToken() {
+export function cancelToken(values) {
   //axios.defaults.withCredentials = true;
-  return axios.request({
+  instance.defaults.withCredentials = true;
+  // let payload = { username: values.username, password: values.password };
+  return instance.request({
     method: "POST",
+    // data: payload,
     url: `${API_URL}/canceltoken`,
   });
   //return { status: 200 };

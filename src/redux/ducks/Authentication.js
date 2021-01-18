@@ -8,7 +8,7 @@ export const loginUser = (data) => ({
   payload: data,
 });
 
-export const logoutUser = (data) => ({
+export const logoutUser = () => ({
   type: LOGOUT_USER,
 });
 

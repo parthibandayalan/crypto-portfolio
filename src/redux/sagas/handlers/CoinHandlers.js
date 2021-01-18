@@ -29,6 +29,7 @@ export function* handleCheckCoin(action) {
         username: state.auth.username,
       };
       if (state.auth.authenticated) {
+        console.log("Coin added to database");
         yield call(addCoinToDb, payload);
       }
     }
