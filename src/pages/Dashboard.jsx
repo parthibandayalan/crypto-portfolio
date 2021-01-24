@@ -141,7 +141,7 @@ export default function Dashboard({ match }) {
                 </Typography>
               )}
               <Typography variant="h6" className={classes.title} align="center">
-                Crypto Portfolio - Updated for new commit
+                Crypto Portfolio - Updated after adding GitHub actions
               </Typography>
               {isLoggedIn && (
                 <Button color="inherit" onClick={() => dispatch(logoutUser())}>
