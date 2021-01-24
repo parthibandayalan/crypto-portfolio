@@ -1,20 +1,15 @@
 FROM node:14.15.0
 
-# Override the base log level (info).
-ENV NPM_CONFIG_LOGLEVEL warn
-
-# Install `serve`.
-RUN npm install -g serve
-
-# Install all dependencies of the current project.
-COPY package.json package.json
-RUN npm install
-
-# Copy all local files into the image.
+FROM node:10.15.3
+RUN mkdir -p /app
+WORKDIR /app
 COPY . .
 
-# Build for production.
-RUN npm run build
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json /app/package.json
+RUN npm install --verbose
+RUN npm install serve -g -silent
 
-# serve static files in dist folder
-CMD serve -p $PORT -s dist
+# start app
+RUN npm run build
+CMD ["serve", "-l", "tcp://0.0.0.0:${PORT}", "-s", "/app/build"]
