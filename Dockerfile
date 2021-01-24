@@ -12,4 +12,4 @@ RUN npm install serve -g -silent
 
 # start app
 RUN npm run build
-CMD ["serve", "-l", "tcp://0.0.0.0:${PORT}", "-s", "/app/build"]
+CMD ["sh", "-c", "serve -l tcp://0.0.0.0:${PORT} -s /app/build"]
