@@ -1,16 +1,20 @@
 FROM node:14.15.0
 
-WORKDIR /app
+# Override the base log level (info).
+ENV NPM_CONFIG_LOGLEVEL warn
 
-ENV PATH /app/node_modules/.bin:$PATH
+# Install `serve`.
+RUN npm install -g serve
 
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install --silent
-RUN npm install react-scripts@3.4.0 -g --silent
+# Install all dependencies of the current project.
+COPY package.json package.json
+RUN npm install
 
-# add app
-COPY . ./
+# Copy all local files into the image.
+COPY . .
 
-# start app
-CMD ["npm", "start"]
+# Build for production.
+RUN npm run build
+
+# serve static files in dist folder
+CMD serve -p $PORT -s dist
