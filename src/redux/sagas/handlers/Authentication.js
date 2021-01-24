@@ -9,7 +9,7 @@ import { refreshToken as refresh } from "../../ducks/Authentication";
 import store from "../../ConfigureStore";
 import { setSnackbar } from "../../ducks/Snackbar";
 import { getPortfolio } from "../../../services/PortfolioServices";
-import { addCoin } from "../../ducks/CoinDucks";
+import { addCoin, resetCoins } from "../../ducks/CoinDucks";
 
 export function* handleLoginUser(action) {
   try {
@@ -26,10 +26,10 @@ export function* handleLoginUser(action) {
       authentication = true;
       const res = yield call(getPortfolio, username);
       localStorage.setItem("portfolio", JSON.stringify(res));
-
       username = res.username;
       name = res.name;
       coins = res.coins;
+      yield put(resetCoins());
       console.log("Response : " + JSON.stringify(name));
       for (const [key, value] of Object.entries(coins)) {
         yield put(addCoin(key, value));
@@ -71,9 +71,11 @@ export function* handleLogoutUser(action) {
     const response = yield call(cancelToken);
     console.log("handler caught response : " + JSON.stringify(response));
     //const { authentication } = response;
+    yield put(resetCoins());
     yield put(setAuthenticated(false, null, null));
     yield put(setSnackbar(true, "success", "Log Out Successful"));
   } catch (error) {
+    yield put(resetCoins());
     yield put(setAuthenticated(false, null, null));
     yield put(setSnackbar(true, "success", "Log Out Successful"));
     //console.log(error);

@@ -23,6 +23,8 @@ import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
 import LightChart from "./../components/LightChartComponent";
 import { logoutUser } from "../redux/ducks/Authentication";
+import Immutable from "immutable";
+import PortfolioCards from "../components/PortfolioCards";
 
 const drawerWidth = 240;
 const appBarHeight = 64;
@@ -98,31 +100,30 @@ export default function Dashboard({ match }) {
   const classes = useStyles();
 
   const [items, setItems] = useState([]);
-  const coins = useSelector((state) => state.coins.coins);
+  const coins = Immutable.Map(useSelector((state) => state.coins));
 
   const nameofUser = useSelector((state) => state.auth.name);
   const username = useSelector((state) => state.auth.username);
 
   const isLoggedIn = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
-
+  //var itemsList = [];
   useEffect(() => {
-    let itemsList = [];
-    for (var coin of coins) {
-      //console.log({ symbol, token });
+    var itemsList = [];
+    coins.forEach((value, key) => {
       let eachItem = {
-        text: coin.symbol + "-USD",
-        onClick: () =>
-          history.push({
+        text: key + "-USD",
+        onClick: () => {
+          return history.push({
             pathname: "/lightchart",
-            state: { coinCode: coin.symbol, noOfTokens: coin.token },
-          }),
+            state: { coinCode: key },
+          });
+        },
       };
       itemsList.push(eachItem);
-    }
+    });
     setItems(itemsList);
-    console.log("use effect executed" + JSON.stringify(coins));
-  }, [coins.length]);
+  }, [coins.size]);
 
   const handleLogout = () => {
     dispatch(logoutUser);
@@ -140,7 +141,7 @@ export default function Dashboard({ match }) {
                 </Typography>
               )}
               <Typography variant="h6" className={classes.title} align="center">
-                Crypto Portfolio
+                Crypto Portfolio - updated
               </Typography>
               {isLoggedIn && (
                 <Button color="inherit" onClick={() => dispatch(logoutUser())}>
@@ -174,18 +175,23 @@ export default function Dashboard({ match }) {
               </div>
               <Divider />
               <List>
-                {items.length > 0 &&
-                  items.map((item, index) => {
-                    const { text, icon, onClick } = item;
-                    return (
-                      <ListItem button key={text} onClick={onClick}>
-                        <ListItemIcon>
-                          <MonetizationOnIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                      </ListItem>
-                    );
-                  })}
+                {
+                  items.length > 0 &&
+                    //////////////////
+                    items.map((item, index) => {
+                      const { text, onClick } = item;
+                      // console.log(text + " " + onClick);
+                      return (
+                        <ListItem button key={text} onClick={onClick}>
+                          <ListItemIcon>
+                            <MonetizationOnIcon />
+                          </ListItemIcon>
+                          <ListItemText primary={text} />
+                        </ListItem>
+                      );
+                    })
+                  ////////////////////////
+                }
                 {items.length <= 0 && (
                   <ListItem button>
                     <ListItemIcon>
@@ -222,22 +228,36 @@ export default function Dashboard({ match }) {
                 </ListItemIcon>
                 <ListItemText primary="Light Chart" />
               </ListItem>
+              <Divider />
+              <ListItem
+                button
+                key="portfoliocards"
+                onClick={() =>
+                  history.push({
+                    pathname: "/cards",
+                  })
+                }
+              >
+                <ListItemIcon>
+                  <MonetizationOnIcon />
+                </ListItemIcon>
+                <ListItemText primary="Your Portfolio" />
+              </ListItem>
             </Drawer>
           </Box>
           <Box className={classes.content}>
             <Switch>
-              <Route exact path={match.url + `chart`} component={CryptoChart}>
+              <Route exact path={match.url + `chart`}>
                 <CryptoChart />
               </Route>
-              <Route
-                exact
-                path={match.url + `lightchart`}
-                component={LightChart}
-              >
+              <Route exact path={match.url + `lightchart`}>
                 <LightChart />
               </Route>
-              <Route exact path={match.url + `addcoin`} component={AddCoin}>
+              <Route exact path={match.url + `addcoin`}>
                 <AddCoin />
+              </Route>
+              <Route exact path={match.url + `cards`}>
+                <PortfolioCards />
               </Route>
             </Switch>
           </Box>

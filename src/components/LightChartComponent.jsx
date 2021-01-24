@@ -13,6 +13,8 @@ export default function LightChartComponent() {
 
   const location = useLocation();
 
+  //console.log(JSON.stringify(location.state.coinCode));
+
   const options = {
     alignLabels: true,
     timeScale: {
@@ -111,16 +113,16 @@ export default function LightChartComponent() {
   const conn = new WebSocket(API_WS);
 
   conn.onmessage = (e) => {
-    console.log("value : ");
-    console.log(e.data);
+    // console.log("value : ");
+    // console.log(e.data);
     var newKlineMap = JSON.parse(e.data);
     const newPoint = {
       time: newKlineMap.k.t / 1000,
       value: parseFloat(newKlineMap.k.o),
     };
 
-    console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
-    console.log("Value : " + newPoint.value);
+    // console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
+    // console.log("Value : " + newPoint.value);
     const oldLineData = lineSeries[0]["data"];
     const newLineSeries = [
       {

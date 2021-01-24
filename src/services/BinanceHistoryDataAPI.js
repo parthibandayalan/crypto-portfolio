@@ -29,3 +29,26 @@ export default async function getHistoricalData(symbol) {
       throw "Invalid Symbol";
     });
 }
+
+export async function getAveragePrice(symbol) {
+  const pairing = symbol + "USDT";
+
+  //https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=1000
+  //axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+  const instance = axios.create({
+    baseURL: "http://localhost:8080",
+  });
+
+  return instance
+    .get(`https://api.binance.com/api/v3/avgPrice`, {
+      params: { symbol: pairing },
+    })
+    .then((res) => {
+      //console.log(res.data.price);
+      return res.data.price;
+    })
+    .catch((error) => {
+      throw "Invalid Symbol " + JSON.stringify(error);
+    });
+}
