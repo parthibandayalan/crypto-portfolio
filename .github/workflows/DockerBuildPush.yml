@@ -35,10 +35,10 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: docker build react app
         run: | 
-          docker build . -f Dockerfile -t pdcryptoportfolio:$VERSION
+          docker build -f Dockerfile -t pdcryptoportfolio:1.0 .
       - name: docker push to docker hub
         run: |
-          docker push pdcryptoportfolio:$VERSION
+          docker push pdcryptoportfolio:1.0
       - name: print echo
         run: |
           echo Action Done!!
