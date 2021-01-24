@@ -37,8 +37,8 @@ jobs:
         run: | 
           docker build -f Dockerfile -t pdcryptoportfolio:1.0 .
       - name: docker push to docker hub
-        run: |
-          docker push pdcryptoportfolio:1.0
+        run: |          
+          docker push parthibandayalan/pdcryptoportfolio:1.0
       - name: print echo
         run: |
           echo Action Done!!
