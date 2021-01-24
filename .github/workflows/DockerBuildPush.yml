@@ -30,14 +30,18 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          VERSION: $(date +%s)
         run: | 
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: docker build react app
         run: | 
-          docker build . -f Dockerfile -t pdcryptoportfolio:$(date +%s)
+          docker build -f Dockerfile -t pdcryptoportfolio:1.0 .
+      - name: docker rename tagname
+        run: |          
+          docker tag pdcryptoportfolio:1.0 parthibandayalan/pdcryptoportfolio:1.0
       - name: docker push to docker hub
-        run: |
-          docker push pdcryptoportfolio:1.0
+        run: |          
+          docker push parthibandayalan/pdcryptoportfolio:1.0
       - name: print echo
         run: |
           echo Action Done!!
