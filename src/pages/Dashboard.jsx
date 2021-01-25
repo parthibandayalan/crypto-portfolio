@@ -105,6 +105,8 @@ export default function Dashboard({ match }) {
   const nameofUser = useSelector((state) => state.auth.name);
   const username = useSelector((state) => state.auth.username);
 
+  console.log(process.env.REACT_APP_API_URL);
+
   const isLoggedIn = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
   //var itemsList = [];
