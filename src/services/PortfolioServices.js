@@ -1,15 +1,19 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080";
+//const API_URL = "http://localhost:8080";
+const API_URL = process.env.REACT_APP_API_URL;
 
-const instance = axios.create({
-  baseURL: "http://localhost:8080",
-});
+const instance = axios.create();
 
 export function getPortfolio(username) {
   instance.defaults.withCredentials = true;
   const url = `${API_URL}/portfolio/${username}`;
-  return instance.get(url).then((response) => response.data);
+  return instance
+    .get(url)
+    .then((response) => response.data)
+    .catch((err) =>
+      console.log("Get User details didnt work" + JSON.stringify(err))
+    );
 }
 
 export function addCoinToDb(coinInfo) {
@@ -23,5 +27,6 @@ export function addCoinToDb(coinInfo) {
 
   return instance
     .post(url, payload)
-    .then((response) => response.status === 200);
+    .then((response) => response.status === 200)
+    .catch((err) => console.log("Add Coin Database : " + JSON.stringify(err)));
 }

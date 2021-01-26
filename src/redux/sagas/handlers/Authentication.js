@@ -8,7 +8,7 @@ import {
 import { refreshToken as refresh } from "../../ducks/Authentication";
 import store from "../../ConfigureStore";
 import { setSnackbar } from "../../ducks/Snackbar";
-import { getPortfolio } from "../../../services/PortfolioServices";
+import { getPortfolio } from "../../sagas/requests/Authentication";
 import { addCoin, resetCoins } from "../../ducks/CoinDucks";
 
 export function* handleLoginUser(action) {
@@ -16,7 +16,7 @@ export function* handleLoginUser(action) {
     console.log("handler caught");
 
     const response = yield call(authenticateUser, action.payload);
-    //console.log("handler caught response : " + JSON.stringify(response));
+    console.log("handler caught response : " + JSON.stringify(response));
 
     let authentication = false;
     let username = action.payload.username;
