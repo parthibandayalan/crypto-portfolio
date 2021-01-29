@@ -3,6 +3,7 @@ import { Typography, Button, Box, TextField, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { checkCoin } from "../redux/ducks/CoinDucks";
+import { setTrigger } from "../redux/ducks/Trigger";
 
 const useStyles = makeStyles((theme) => ({
   blockBox: {
@@ -49,7 +50,9 @@ export default function AddCoin() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => dispatch(checkCoin(strSymbol, token))}
+              onClick={() => {
+                dispatch(checkCoin(strSymbol, token));
+              }}
             >
               Add
             </Button>

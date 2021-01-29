@@ -1,17 +1,31 @@
-import Immutable from "immutable";
 export const CHECK_COIN = "CHECK_COIN";
 const ADD_COIN = "ADD_COIN";
+const REMOVE_COIN = "REMOVE_COIN";
 const RESET_COIN = "RESET_COIN";
 
-export default (state = Immutable.Map({}), action) => {
+const intialState = {
+  coins: {},
+};
+
+export default (state = intialState, action) => {
   switch (action.type) {
     case ADD_COIN:
-      let { symbol, token, rate } = action;
+      let { symbol, token } = action;
       //console.log("ADD COIN Reducer " + symbol + " " + token);
       //const newMap = state.coins.set(symbol, token);
-      return state.setIn([symbol], token);
+      var newState = {
+        coins: { ...state.coins },
+      };
+      newState.coins[symbol] = token;
+      return newState;
+    case REMOVE_COIN:
+      delete state.coins[action.symbol];
+      var newState = {
+        coins: { ...state.coins },
+      };
+      return newState;
     case RESET_COIN:
-      return Immutable.Map({});
+      return intialState;
     default:
       return state;
   }
@@ -27,6 +41,11 @@ export const addCoin = (symbol, token) => ({
   type: ADD_COIN,
   symbol,
   token,
+});
+
+export const removeCoin = (symbol) => ({
+  type: REMOVE_COIN,
+  symbol,
 });
 
 export const resetCoins = () => ({

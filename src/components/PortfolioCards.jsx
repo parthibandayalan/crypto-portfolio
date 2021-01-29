@@ -8,18 +8,44 @@ import { SettingsRemoteSharp } from "@material-ui/icons";
 export default function PortfolioCards() {
   const [totalValue, setTotalValue] = useState(0.0);
   const [items, setItems] = useState([]);
-  const coins = Immutable.Map(useSelector((state) => state.coins));
+  const coins = useSelector((state) => state.coins.coins);
+
+  /*
+  var itemsList = [];
+    console.log(JSON.stringify(coins));
+    for (const [key, value] of Object.entries(coins)) {
+      console.log(key, value);
+      let eachItem = {
+        text: key + "-USD",
+        onClick: () => {
+          return history.push({
+            pathname: "/lightchart",
+            state: { coinCode: key },
+          });
+        },
+      };
+      itemsList.push(eachItem);
+    }    
+    setItems(itemsList);
+    dispatch(resetTrigger());
+   */
 
   useEffect(() => {
     var itemsList = [];
-    coins.forEach((tokens, symbol) => {
+    for (const [symbol, tokens] of Object.entries(coins)) {
       itemsList.push({
         symbol,
         tokens,
       });
-    });
+    }
+    /*coins.forEach((tokens, symbol) => {
+      itemsList.push({
+        symbol,
+        tokens,
+      });
+    });*/
     setItems(itemsList);
-  }, [coins.size]);
+  }, []);
 
   return (
     <Grid container direction="column" spacing={2}>
@@ -42,7 +68,11 @@ export default function PortfolioCards() {
             // console.log("item : " + JSON.stringify(item));
             //const { symbol, tokens } = item;
             return (
-              <CryptoCard symbol={item["symbol"]} tokens={item["tokens"]} />
+              <CryptoCard
+                key={item["symbol"]}
+                symbol={item["symbol"]}
+                tokens={item["tokens"]}
+              />
             );
           })}
         </Grid>

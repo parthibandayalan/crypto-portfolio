@@ -23,8 +23,9 @@ import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
 import LightChart from "./../components/LightChartComponent";
 import { logoutUser } from "../redux/ducks/Authentication";
-import Immutable from "immutable";
+
 import PortfolioCards from "../components/PortfolioCards";
+import { resetTrigger } from "../redux/ducks/Trigger";
 
 const drawerWidth = 240;
 const appBarHeight = 64;
@@ -100,7 +101,8 @@ export default function Dashboard({ match }) {
   const classes = useStyles();
 
   const [items, setItems] = useState([]);
-  const coins = Immutable.Map(useSelector((state) => state.coins));
+  const coins = useSelector((state) => state.coins.coins);
+  const reload = useSelector((state) => state.trigger.boolTrigger);
 
   const nameofUser = useSelector((state) => state.auth.name);
   const username = useSelector((state) => state.auth.username);
@@ -112,7 +114,9 @@ export default function Dashboard({ match }) {
   //var itemsList = [];
   useEffect(() => {
     var itemsList = [];
-    coins.forEach((value, key) => {
+    console.log(JSON.stringify(coins));
+    for (const [key, value] of Object.entries(coins)) {
+      console.log(key, value);
       let eachItem = {
         text: key + "-USD",
         onClick: () => {
@@ -123,9 +127,10 @@ export default function Dashboard({ match }) {
         },
       };
       itemsList.push(eachItem);
-    });
+    }
     setItems(itemsList);
-  }, [coins.size]);
+    dispatch(resetTrigger());
+  }, [reload]);
 
   const handleLogout = () => {
     dispatch(logoutUser);
@@ -143,7 +148,7 @@ export default function Dashboard({ match }) {
                 </Typography>
               )}
               <Typography variant="h6" className={classes.title} align="center">
-                Crypto Portfolio - Updated after adding GitHub actions
+                Crypto Portfolio
               </Typography>
               {isLoggedIn && (
                 <Button color="inherit" onClick={() => dispatch(logoutUser())}>

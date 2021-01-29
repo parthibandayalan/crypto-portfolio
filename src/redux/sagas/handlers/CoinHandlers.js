@@ -1,5 +1,6 @@
 import { setSnackbar } from "../../ducks/Snackbar";
 import { addCoin } from "../../ducks/CoinDucks";
+import { setTrigger } from "../../ducks/Trigger";
 import { call, put } from "redux-saga/effects";
 import getHistoricalData from "../../../services/BinanceHistoryDataAPI";
 import { addCoinToDb } from "../../../services/PortfolioServices";
@@ -35,6 +36,7 @@ export function* handleCheckCoin(action) {
     }
 
     yield put(addCoin(symbol, token));
+    yield put(setTrigger());
     yield put(setSnackbar(true, "success", "Your coin is added"));
   } catch (error) {
     console.log(error);
