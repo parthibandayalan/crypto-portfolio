@@ -72,7 +72,7 @@ export default function LoginPage() {
             onSubmit={(values, formikHelpers) => {
               // console.log("Submition Done");
               // console.log(values);
-              dispatch(loginUser(values)).then(() => history.push("/"));
+              dispatch(loginUser(values));
               //dispatch(loginUser(values));
               // errorVisible = true;
               // console.log("dispatch done outside :" + auth);

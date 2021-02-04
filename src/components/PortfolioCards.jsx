@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import CryptoCard from "./CryptoCard";
 import { Grid, Typography } from "@material-ui/core";
-import Immutable from "immutable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SettingsRemoteSharp } from "@material-ui/icons";
 
+import TotalPortfolioValue from "../components/TotalPortfolioValue";
+
 export default function PortfolioCards() {
-  const [totalValue, setTotalValue] = useState(0.0);
+  // const [totalValue, setTotalValue] = useState(0.0);
   const [items, setItems] = useState([]);
   const coins = useSelector((state) => state.coins.coins);
 
+  //const reload = useSelector((state) => state.trigger.boolTrigger);
+  //const dispatch = useDispatch();
   /*
   var itemsList = [];
     console.log(JSON.stringify(coins));
@@ -27,7 +30,7 @@ export default function PortfolioCards() {
       itemsList.push(eachItem);
     }    
     setItems(itemsList);
-    dispatch(resetTrigger());
+    dispatch(resetTrigger());    
    */
 
   useEffect(() => {
@@ -38,12 +41,6 @@ export default function PortfolioCards() {
         tokens,
       });
     }
-    /*coins.forEach((tokens, symbol) => {
-      itemsList.push({
-        symbol,
-        tokens,
-      });
-    });*/
     setItems(itemsList);
   }, []);
 
@@ -53,13 +50,7 @@ export default function PortfolioCards() {
         <Typography>Your Portfolio</Typography>
       </Grid>
       <Grid item>
-        <Typography>
-          Total Portfolio value :{" "}
-          {totalValue.toLocaleString("en-US", {
-            style: "currency",
-            currency: "USD",
-          })}
-        </Typography>
+        <TotalPortfolioValue />
       </Grid>
       <Grid item container>
         <Grid item xs={false} sm={false} md={2} />

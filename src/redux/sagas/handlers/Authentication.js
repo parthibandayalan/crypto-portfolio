@@ -31,9 +31,11 @@ export function* handleLoginUser(action) {
       coins = res.coins;
       yield put(resetCoins());
       console.log("Response : " + JSON.stringify(name));
-      for (const [key, value] of Object.entries(coins)) {
-        yield put(addCoin(key, value));
-        console.log(key, value);
+      if (coins != null) {
+        for (const [key, value] of Object.entries(coins)) {
+          yield put(addCoin(key, value));
+          console.log(key, value);
+        }
       }
     }
     //const { authentication } = response;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import PortfolioCards from "../components/PortfolioCards";
 
 //const API_URL = "http://localhost:8080";
 const API_URL = process.env.REACT_APP_API_URL;
@@ -29,4 +30,29 @@ export function addCoinToDb(coinInfo) {
     .post(url, payload)
     .then((response) => response.status === 200)
     .catch((err) => console.log("Add Coin Database : " + JSON.stringify(err)));
+}
+
+export function checkUsernameExist(username) {
+  const url = `${API_URL}/portfolio/checkusername`;
+  let payload = {
+    username,
+  };
+  return instance
+    .post(url, payload)
+    .then((res) => res.status === 200)
+    .catch((res) => false);
+}
+
+export function createUser(values) {
+  const url = `${API_URL}/portfolio/create`;
+  console.log(JSON.stringify(values));
+  return instance
+    .post(url, values)
+    .then((res) => {
+      return res.status === 200;
+    })
+    .catch((res) => {
+      console.log("Response in Portfolio : " + JSON.stringify(res));
+      return false;
+    });
 }

@@ -3,6 +3,7 @@ import snackbarReducer from "./ducks/Snackbar";
 import coinReducer from "./ducks/CoinDucks";
 import authReducer from "./ducks/Authentication";
 import triggerReducer from "./ducks/Trigger";
+import valuesReducer from "./ducks/TotalValueDucks";
 import createSagaMiddleware from "redux-saga";
 import { watcherSaga } from "./sagas/rootSaga";
 import logger from "redux-logger";
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
   coins: coinReducer,
   auth: authReducer,
   trigger: triggerReducer,
+  totValues: valuesReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

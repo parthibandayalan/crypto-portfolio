@@ -23,6 +23,7 @@ import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
 import LightChart from "./../components/LightChartComponent";
 import { logoutUser } from "../redux/ducks/Authentication";
+import RealTimeChart from "../components/RealTimeChart";
 
 import PortfolioCards from "../components/PortfolioCards";
 import { resetTrigger } from "../redux/ducks/Trigger";
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
+  toolbar: {},
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
@@ -71,8 +73,16 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: "flex-end",
   },
-  title: {
+  box1: {
     flexGrow: 1,
+    textAlign: "left",
+  },
+  box2: {
+    flexGrow: 1,
+  },
+  box3: {
+    flexGrow: 1,
+    textAlign: "right",
   },
   contentIn: {
     marginTop: appBarHeight,
@@ -114,9 +124,9 @@ export default function Dashboard({ match }) {
   //var itemsList = [];
   useEffect(() => {
     var itemsList = [];
-    console.log(JSON.stringify(coins));
+    // console.log(JSON.stringify(coins));
     for (const [key, value] of Object.entries(coins)) {
-      console.log(key, value);
+      // console.log(key, value);
       let eachItem = {
         text: key + "-USD",
         onClick: () => {
@@ -141,30 +151,35 @@ export default function Dashboard({ match }) {
       <Box className={classes.blockBox}>
         <Box className={classes.blockBox}>
           <AppBar position="fixed" className={classes.appBar}>
-            <Toolbar>
-              {isLoggedIn && (
-                <Typography variant="h6" className={classes.title} align="left">
-                  {nameofUser}
-                </Typography>
-              )}
-              <Typography variant="h6" className={classes.title} align="center">
-                Crypto Portfolio
-              </Typography>
-              {isLoggedIn && (
-                <Button color="inherit" onClick={() => dispatch(logoutUser())}>
-                  Log Out
-                </Button>
-              )}
-              {!isLoggedIn && (
-                <Button
-                  color="inherit"
-                  onClick={() => {
-                    history.push("/login");
-                  }}
-                >
-                  Log In
-                </Button>
-              )}
+            <Toolbar className={classes.toolbar}>
+              <Box className={classes.box1}>
+                {isLoggedIn && (
+                  <Typography variant="h6">{nameofUser}</Typography>
+                )}
+              </Box>
+              <Box className={classes.box2}>
+                <Typography variant="h6">Crypto Portfolio</Typography>
+              </Box>
+              <Box className={classes.box3}>
+                {isLoggedIn && (
+                  <Button
+                    color="inherit"
+                    onClick={() => dispatch(logoutUser())}
+                  >
+                    Log Out
+                  </Button>
+                )}
+                {!isLoggedIn && (
+                  <Button
+                    color="inherit"
+                    onClick={() => {
+                      history.push("/login");
+                    }}
+                  >
+                    Login In
+                  </Button>
+                )}
+              </Box>
             </Toolbar>
           </AppBar>
         </Box>
@@ -258,7 +273,7 @@ export default function Dashboard({ match }) {
                 <CryptoChart />
               </Route>
               <Route exact path={match.url + `lightchart`}>
-                <LightChart />
+                <RealTimeChart />
               </Route>
               <Route exact path={match.url + `addcoin`}>
                 <AddCoin />

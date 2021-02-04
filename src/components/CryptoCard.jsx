@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch } from "react-redux";
+import { addValue } from "../redux/ducks/TotalValueDucks";
 import {
   Card,
   CardContent,
@@ -8,6 +10,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import { getAveragePrice } from "../services/BinanceHistoryDataAPI";
+import { setTrigger } from "../redux/ducks/Trigger";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -18,17 +21,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CryptoCard(props) {
   const classes = useStyles();
-  const { symbol, tokens, currentTotalValue, parentCallback } = props;
+  const { symbol, tokens } = props;
 
   const title = symbol + "-USD";
 
   const [rate, setRate] = useState(0.0);
+
+  const dispatch = useDispatch();
 
   useInterval(() => {
     // console.log("Interval running in the background " + JSON.stringify(symbol));
     getAveragePrice(symbol)
       .then((res) => {
         setRate(parseFloat(res));
+        dispatch(
+          addValue(symbol, JSON.stringify(parseFloat(res) * parseFloat(tokens)))
+        );
+        dispatch(setTrigger());
       })
       .catch((err) => console.log(err));
   }, 1000);
