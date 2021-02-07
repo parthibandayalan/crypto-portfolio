@@ -1,5 +1,5 @@
-import { handleCheckCoin } from "./handlers/CoinHandlers";
-import { CHECK_COIN } from "./../ducks/CoinDucks";
+import { handleCheckCoin, handleRemoveCoinReq } from "./handlers/CoinHandlers";
+import { CHECK_COIN, REMOVE_COIN_REQ } from "./../ducks/CoinDucks";
 import { takeLatest } from "redux-saga/effects";
 import {
   handleLoginUser,
@@ -17,4 +17,5 @@ export function* watcherSaga() {
   yield takeLatest(LOGIN_USER, handleLoginUser);
   yield takeLatest(LOGOUT_USER, handleLogoutUser);
   yield takeLatest(REFRESH_TOKEN, handleRefreshToken);
+  yield takeLatest(REMOVE_COIN_REQ, handleRemoveCoinReq);
 }

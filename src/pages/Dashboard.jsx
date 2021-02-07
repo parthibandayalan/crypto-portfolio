@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CryptoChart from "../components/CryptoChart";
 import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
-import LightChart from "./../components/LightChartComponent";
+
 import { logoutUser } from "../redux/ducks/Authentication";
 import RealTimeChart from "../components/RealTimeChart";
 
@@ -132,7 +132,7 @@ export default function Dashboard({ match }) {
         onClick: () => {
           return history.push({
             pathname: "/lightchart",
-            state: { coinCode: key },
+            state: { coinCode: key, tokens: value },
           });
         },
       };
@@ -143,7 +143,7 @@ export default function Dashboard({ match }) {
   }, [reload]);
 
   const handleLogout = () => {
-    dispatch(logoutUser);
+    dispatch(logoutUser());
   };
 
   return (
@@ -170,14 +170,24 @@ export default function Dashboard({ match }) {
                   </Button>
                 )}
                 {!isLoggedIn && (
-                  <Button
-                    color="inherit"
-                    onClick={() => {
-                      history.push("/login");
-                    }}
-                  >
-                    Login In
-                  </Button>
+                  <div>
+                    <Button
+                      color="inherit"
+                      onClick={() => {
+                        history.push("/login");
+                      }}
+                    >
+                      Log In
+                    </Button>
+                    <Button
+                      color="inherit"
+                      onClick={() => {
+                        history.push("/register");
+                      }}
+                    >
+                      Register
+                    </Button>
+                  </div>
                 )}
               </Box>
             </Toolbar>
@@ -234,7 +244,7 @@ export default function Dashboard({ match }) {
                 </ListItemIcon>
                 <ListItemText primary="Add Coin" />
               </ListItem>
-              <Divider />
+              {/* <Divider />
               <ListItem
                 button
                 key="lightchart"
@@ -249,7 +259,7 @@ export default function Dashboard({ match }) {
                   <MonetizationOnIcon />
                 </ListItemIcon>
                 <ListItemText primary="Light Chart" />
-              </ListItem>
+              </ListItem> */}
               <Divider />
               <ListItem
                 button

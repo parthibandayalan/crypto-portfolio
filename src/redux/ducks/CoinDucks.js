@@ -1,4 +1,5 @@
 export const CHECK_COIN = "CHECK_COIN";
+export const REMOVE_COIN_REQ = "REMOVE_COIN_REQ";
 const ADD_COIN = "ADD_COIN";
 const REMOVE_COIN = "REMOVE_COIN";
 const RESET_COIN = "RESET_COIN";
@@ -45,6 +46,11 @@ export const addCoin = (symbol, token) => ({
 
 export const removeCoin = (symbol) => ({
   type: REMOVE_COIN,
+  symbol,
+});
+
+export const removeCoinReq = (symbol) => ({
+  type: REMOVE_COIN_REQ,
   symbol,
 });
 

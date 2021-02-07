@@ -5,11 +5,23 @@ import Registration from "./pages/Registration";
 import ErrorPage from "./pages/ErrorPage";
 import Dashboard from "./pages/Dashboard";
 import Snackbar from "./components/CustomizedSnackBar";
+import IdleTimerDialog from "./components/IdleTimerDialog";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+  timerClass: {
+    zIndex: 10,
+    postion: "absolute",
+  },
+}));
 
 function App() {
+  const classes = useStyles();
+
   return (
     <div className="App">
       <Snackbar />
+      <IdleTimerDialog />
       <Router>
         <Switch>
           <Route exact path="/login" component={LoginPage} />

@@ -32,6 +32,22 @@ export function addCoinToDb(coinInfo) {
     .catch((err) => console.log("Add Coin Database : " + JSON.stringify(err)));
 }
 
+export function removeCoinFromDb(coinInfo) {
+  instance.defaults.withCredentials = true;
+  const url = `${API_URL}/coins/remove`;
+  let payload = {
+    coin: coinInfo.coin,
+    username: coinInfo.username,
+  };
+
+  return instance
+    .post(url, payload)
+    .then((response) => response.status === 200)
+    .catch((err) =>
+      console.log("Remove Coin from Database : " + JSON.stringify(err))
+    );
+}
+
 export function checkUsernameExist(username) {
   const url = `${API_URL}/portfolio/checkusername`;
   let payload = {
