@@ -6,7 +6,7 @@ import {
   Typography,
   TextField,
   makeStyles,
-  MenuItem,
+  Link,
   Box,
   Button,
 } from "@material-ui/core";
@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 2),
     margin: theme.spacing(8, 2),
   },
+  buttonBlock: {
+    width: "100%",
+    margin: "auto auto",
+    display: "block",
+  },
 }));
 
 export default function Registration() {
@@ -44,7 +49,19 @@ export default function Registration() {
     <div align="center">
       <Card className={classes.regPaper}>
         <CardContent>
-          <Typography variant="h4">New User Account Creation</Typography>
+          <div>
+            <img
+              src={process.env.PUBLIC_URL + "/assets/crypto.png"}
+              width={50}
+              height={50}
+              alt="logo"
+            />
+            <Typography variant="h4">Crypto-Portfolio</Typography>
+          </div>
+          <div>
+            <Typography variant="h6">Registration</Typography>
+          </div>
+
           <Formik
             initialValues={initialValues}
             validationSchema={Yup.object().shape({
@@ -149,29 +166,35 @@ export default function Registration() {
                     <ErrorMessage name="passwordConfirmation" />
                   </FormGroup>
                 </Box>
-                <Box marginBottom={2}>
+                <div />
+                <Box marginBottom={1}>
                   <Button
+                    color="primary"
                     variant="contained"
                     type="submit"
                     disabled={isSubmitting || isValidating}
+                    className={classes.buttonBlock}
                   >
                     Submit
                   </Button>
                 </Box>
-                <Box marginBottom={2}>
+                <Box marginBottom={1}>
                   <Button
                     variant="contained"
                     type="reset"
                     disabled={isSubmitting || isValidating}
+                    className={classes.buttonBlock}
                   >
                     Reset
                   </Button>
                 </Box>
-                {/*<pre>{JSON.stringify(errors, null, 4)}</pre>
-                <pre>{JSON.stringify(values, null, 4)}</pre>*/}
               </Form>
             )}
           </Formik>
+          <Typography variant="subtitle1">
+            Already Registered?{" "}
+            <Link onClick={() => history.push("/login")}>Login</Link>
+          </Typography>
         </CardContent>
       </Card>
     </div>
