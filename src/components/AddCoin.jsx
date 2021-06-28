@@ -3,14 +3,18 @@ import { Typography, Button, Box, TextField, Card } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { checkCoin } from "../redux/ducks/CoinDucks";
-import { setTrigger } from "../redux/ducks/Trigger";
 
 const useStyles = makeStyles((theme) => ({
   blockBox: {
     display: "block",
     padding: theme.spacing(2, 2),
   },
-  inlineBlockBox: { display: "inline-block" },
+  inlineBlockBox: { display: "inline-block", width: "300px" },
+  cardClass: {},
+  typoClass: {
+    padding: theme.spacing(1, 0, 0, 0),
+    fontSize: "13px",
+  },
 }));
 
 export default function AddCoin() {
@@ -26,7 +30,7 @@ export default function AddCoin() {
   return (
     <div>
       <Box className={classes.inlineBlockBox}>
-        <Card>
+        <Card className={classes.cardClass}>
           <Typography variant="h6" className={classes.blockBox} align="center">
             Add Coin
           </Typography>
@@ -36,6 +40,8 @@ export default function AddCoin() {
               label="Crypto Symbol"
               variant="outlined"
               onChange={handleCoinChange}
+              value={strSymbol}
+              helperText="Enter ID ex: bitcoin,ethereum,litecoin.."
             />
           </Box>
           <Box className={classes.blockBox}>
@@ -44,6 +50,7 @@ export default function AddCoin() {
               label="Number of Tokens"
               variant="outlined"
               onChange={handleTokenChange}
+              value={token}
             />
           </Box>
           <Box className={classes.blockBox}>
@@ -52,6 +59,8 @@ export default function AddCoin() {
               color="primary"
               onClick={() => {
                 dispatch(checkCoin(strSymbol, token));
+                setToken("");
+                setStrSymbol("");
               }}
             >
               Add

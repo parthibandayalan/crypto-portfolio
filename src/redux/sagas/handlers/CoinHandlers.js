@@ -2,7 +2,10 @@ import { setSnackbar } from "../../ducks/Snackbar";
 import { addCoin, removeCoin } from "../../ducks/CoinDucks";
 import { setTrigger } from "../../ducks/Trigger";
 import { call, put } from "redux-saga/effects";
-import getHistoricalData from "../../../services/BinanceHistoryDataAPI";
+import {
+  getHistoricalData,
+  getCoinDetails,
+} from "../../../services/CryptoAPIService";
 import {
   addCoinToDb,
   removeCoinFromDb,
@@ -12,15 +15,16 @@ export function* handleCheckCoin(action) {
   //yield put(setSnackbar(true, "success", "Your coin is added"));
   try {
     console.log("Check Coin caught" + JSON.stringify(action));
-    const { symbol, token } = action;
-    console.log(
-      "Symbol : " + JSON.stringify(symbol) + " Token " + JSON.stringify(token)
-    );
+    const { id, token } = action;
+
     if (isNaN(token) || Number(token) < 0) {
       throw "Enter Valid Number";
     }
     //const response = yield call(checkSymbol, symbol);
-    //yield call(checkSymbolBinanceApi, symbol);
+    const response = yield call(getCoinDetails, id);
+    console.log(response);
+    const symbol = response.data[0].symbol.toUpperCase();
+    const image = response.data[0].image;
     yield call(getHistoricalData, symbol);
     //console.log("Response : " + JSON.stringify(response));
     const serializedState = localStorage.getItem("state");
@@ -30,6 +34,8 @@ export function* handleCheckCoin(action) {
       const payload = {
         coin: symbol,
         tokens: token,
+        id: id,
+        image: image,
         username: state.auth.username,
       };
       if (state.auth.authenticated) {
@@ -38,7 +44,7 @@ export function* handleCheckCoin(action) {
       }
     }
 
-    yield put(addCoin(symbol, token));
+    yield put(addCoin(symbol, token, id, image));
     yield put(setTrigger());
     yield put(setSnackbar(true, "success", "Your coin is added"));
   } catch (error) {

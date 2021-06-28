@@ -25,6 +25,7 @@ export function* handleLoginUser(action) {
     if (response.status === 200) {
       authentication = true;
       const res = yield call(getPortfolio, username);
+      console.log("returned data : " + JSON.stringify(res));
       localStorage.setItem("portfolio", JSON.stringify(res));
       username = res.username;
       name = res.name;
@@ -33,7 +34,7 @@ export function* handleLoginUser(action) {
       console.log("Response : " + JSON.stringify(name));
       if (coins != null) {
         for (const [key, value] of Object.entries(coins)) {
-          yield put(addCoin(key, value));
+          yield put(addCoin(key, value.tokens, value.id, value.image));
           console.log(key, value);
         }
       }

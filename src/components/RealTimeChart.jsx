@@ -3,16 +3,9 @@ import { createChart, line } from "lightweight-charts";
 import { useDispatch } from "react-redux";
 //import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
-import getHistoricalData from "./../services/BinanceHistoryDataAPI";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Typography,
-  Grid,
-  Button,
-} from "@material-ui/core";
-import { getAveragePrice } from "../services/BinanceHistoryDataAPI";
+import { getHistoricalData } from "./../services/CryptoAPIService";
+import { Card, Typography, Grid, Button, makeStyles } from "@material-ui/core";
+
 import { removeCoinReq } from "../redux/ducks/CoinDucks";
 
 const HEIGHT = 600;
@@ -20,17 +13,28 @@ const HEIGHT = 600;
 let chart;
 let candlestickSeries;
 
+const useStyles = makeStyles((theme) => ({
+  mainCard: {
+    width: 1000,
+  },
+  titleItems: {
+    display: "flex",
+    direction: "row",
+    alignItems: "left",
+  },
+}));
+
 export default function RealTimeChart() {
   const chartRef = React.useRef();
   const legendRef = React.useRef();
   const location = useLocation();
-  var previousTime = 0.0;
 
-  // const legend = "Legend test";
+  const classes = useStyles();
+
   const symbol = location.state.coinCode;
   const legend = symbol + "-USDT";
-  const tokens = location.state.tokens;
-  const decimals = 0.0;
+
+  const { token, id, image } = location.state.value;
 
   const dispatch = useDispatch();
 
@@ -71,14 +75,6 @@ export default function RealTimeChart() {
       priceScale: {
         autoScale: true,
       },
-      /*watermark: {
-        color: "rgba(0, 0, 0, 0.7)",
-        visible: true,
-        text: "TxQuick",
-        fontSize: 18,
-        horzAlign: "left",
-        vertAlign: "bottom",
-      },*/
     });
 
     candlestickSeries = chart.addLineSeries();
@@ -88,29 +84,14 @@ export default function RealTimeChart() {
     ////////////////////////////////////////
     getHistoricalData(location.state.coinCode)
       .then((incD) => {
-        //console.log("received by the component : " + JSON.stringify(incD));
-        //setIncomingData(incD);
-        // const oldLineData = lineSeries[0]["data"];
-        // const newLineSeries = [
-        //   {
-        //     data: [...oldLineData, ...incD],
-        //   },
-        // ];
-        //setLineSeries(newLineSeries);
-        console.log(JSON.stringify(incD));
+        //console.log(JSON.stringify(incD));
         candlestickSeries.setData(incD);
-        //console.log("received by the component : ");
-        //console.log(newLineSeries);
       })
       .catch((error) => {
         throw error;
       });
     ////////////////////////////////////////
   }, [location.state.coinCode]);
-
-  //   React.useEffect(() => {
-  //     candlestickSeries.update(lastCandle);
-  //   }, [lastCandle]);
 
   ////////////////below code is for websocket
   const API_WS =
@@ -131,7 +112,7 @@ export default function RealTimeChart() {
       };
 
       // console.log(newKlineMap.k.t + " " + newKlineMap.k.o);
-      console.log("Value : " + JSON.stringify(newPoint));
+      //console.log("Value : " + JSON.stringify(newPoint));
       candlestickSeries.update(newPoint);
       setRate(parseFloat(newKlineMap.c));
       // chart.timeScale().fitContent();
@@ -146,20 +127,7 @@ export default function RealTimeChart() {
     };
   });
 
-  /////////////////////////////////////
-
-  // useInterval(() => {
-  //   // console.log("Interval running in the background " + JSON.stringify(symbol));
-  //   getAveragePrice(symbol)
-  //     .then((res) => {
-  //       setRate(parseFloat(res));
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, 1000);
-
-  ///////////////////////////////////////////
-
-  React.useEffect(() => {
+  useEffect(() => {
     const handler = () => {
       chart.resize(chartRef.current.offsetWidth, HEIGHT);
     };
@@ -170,11 +138,14 @@ export default function RealTimeChart() {
   }, []);
 
   return (
-    <Card>
+    <Card className={classes.mainCard}>
       <Grid container>
         <Grid item container justify="center">
           <Grid>
-            <Typography>{legend}</Typography>{" "}
+            <div className={classes.titleItems}>
+              <img src={image} width="30" height="30" />{" "}
+              <Typography variant="h5">{legend}</Typography>{" "}
+            </div>
           </Grid>
         </Grid>
         <Grid item container justify="space-around">
@@ -185,10 +156,10 @@ export default function RealTimeChart() {
               currency: "USD",
             })}
           </Typography>
-          <Typography>Tokens : {tokens} </Typography>
+          <Typography>Tokens : {token} </Typography>
           <Typography>
             Value :{" "}
-            {(parseFloat(rate) * parseFloat(tokens)).toLocaleString("en-US", {
+            {(parseFloat(rate) * parseFloat(token)).toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
             })}
@@ -216,7 +187,9 @@ export default function RealTimeChart() {
         <Grid item container justify="flex-end">
           <Button
             variant="contained"
-            color="secondary"
+            style={{
+              backgroundColor: "red",
+            }}
             onClick={() => dispatch(removeCoinReq(symbol))}
           >
             Remove Coin
@@ -226,30 +199,3 @@ export default function RealTimeChart() {
     </Card>
   );
 }
-
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-
-  // Remember the latest function.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
-
-// CandleChart.propTypes = {
-//   legend: PropTypes.string,
-//   initCandles: PropTypes.array,
-//   lastCandle: PropTypes.object,
-//   decimals: PropTypes.number,
-// };

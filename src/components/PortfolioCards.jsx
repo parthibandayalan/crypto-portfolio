@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import CryptoCard from "./CryptoCard";
 import { Grid, Typography } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { SettingsRemoteSharp } from "@material-ui/icons";
+import { useSelector } from "react-redux";
 
 import TotalPortfolioValue from "../components/TotalPortfolioValue";
 
@@ -11,34 +10,14 @@ export default function PortfolioCards() {
   const [items, setItems] = useState([]);
   const coins = useSelector((state) => state.coins.coins);
 
-  //const reload = useSelector((state) => state.trigger.boolTrigger);
-  //const dispatch = useDispatch();
-  /*
-  var itemsList = [];
-    console.log(JSON.stringify(coins));
-    for (const [key, value] of Object.entries(coins)) {
-      console.log(key, value);
-      let eachItem = {
-        text: key + "-USD",
-        onClick: () => {
-          return history.push({
-            pathname: "/lightchart",
-            state: { coinCode: key },
-          });
-        },
-      };
-      itemsList.push(eachItem);
-    }    
-    setItems(itemsList);
-    dispatch(resetTrigger());    
-   */
-
   useEffect(() => {
     var itemsList = [];
-    for (const [symbol, tokens] of Object.entries(coins)) {
+    for (const [symbol, { token, image, id }] of Object.entries(coins)) {
       itemsList.push({
         symbol,
-        tokens,
+        tokens: token,
+        image,
+        id,
       });
     }
     setItems(itemsList);
@@ -57,14 +36,7 @@ export default function PortfolioCards() {
         <Grid item xs={12} sm={12} md={8} container spacing={2}>
           {items.map((item, index) => {
             // console.log("item : " + JSON.stringify(item));
-            //const { symbol, tokens } = item;
-            return (
-              <CryptoCard
-                key={item["symbol"]}
-                symbol={item["symbol"]}
-                tokens={item["tokens"]}
-              />
-            );
+            return <CryptoCard key={item["symbol"]} details={item} />;
           })}
         </Grid>
         <Grid item xs={false} sm={false} md={2} />

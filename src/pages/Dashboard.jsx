@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import {
   AppBar,
-  IconButton,
   Toolbar,
   Typography,
   Button,
@@ -18,7 +16,6 @@ import {
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import { useHistory, Switch } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import CryptoChart from "../components/CryptoChart";
 import { Route } from "react-router-dom";
 import AddCoin from "./../components/AddCoin";
 
@@ -92,6 +89,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     marginLeft: drawerWidth,
+    display: "flex",
+    justifyContent: "center",
   },
   blockBox: {
     display: "block",
@@ -121,18 +120,19 @@ export default function Dashboard({ match }) {
 
   const isLoggedIn = useSelector((state) => state.auth.authenticated);
   const dispatch = useDispatch();
-  //var itemsList = [];
+
   useEffect(() => {
     var itemsList = [];
-    // console.log(JSON.stringify(coins));
     for (const [key, value] of Object.entries(coins)) {
-      // console.log(key, value);
+      console.log(value.token);
       let eachItem = {
         text: key + "-USD",
+        id: value.id,
+        image: value.image,
         onClick: () => {
           return history.push({
             pathname: "/lightchart",
-            state: { coinCode: key, tokens: value },
+            state: { coinCode: key, value },
           });
         },
       };
@@ -200,23 +200,18 @@ export default function Dashboard({ match }) {
               className={classes.drawer}
               classes={{ paper: classes.drawerPaper }}
             >
-              <div className={classes.drawerHeader}>
-                {/*<IconButton>
-                  <MonetizationOnIcon />
-                </IconButton>*/}
-              </div>
               <Divider />
               <List>
                 {
                   items.length > 0 &&
                     //////////////////
                     items.map((item, index) => {
-                      const { text, onClick } = item;
-                      // console.log(text + " " + onClick);
+                      const { text, onClick, id, image } = item;
+
                       return (
                         <ListItem button key={text} onClick={onClick}>
                           <ListItemIcon>
-                            <MonetizationOnIcon />
+                            <img src={image} width="20" height="20" />
                           </ListItemIcon>
                           <ListItemText primary={text} />
                         </ListItem>
@@ -244,22 +239,6 @@ export default function Dashboard({ match }) {
                 </ListItemIcon>
                 <ListItemText primary="Add Coin" />
               </ListItem>
-              {/* <Divider />
-              <ListItem
-                button
-                key="lightchart"
-                onClick={() =>
-                  history.push({
-                    pathname: "/lightchart",
-                    state: { coinCode: "ETH" },
-                  })
-                }
-              >
-                <ListItemIcon>
-                  <MonetizationOnIcon />
-                </ListItemIcon>
-                <ListItemText primary="Light Chart" />
-              </ListItem> */}
               <Divider />
               <ListItem
                 button
@@ -278,20 +257,19 @@ export default function Dashboard({ match }) {
             </Drawer>
           </Box>
           <Box className={classes.content}>
-            <Switch>
-              <Route exact path={match.url + `chart`}>
-                <CryptoChart />
-              </Route>
-              <Route exact path={match.url + `lightchart`}>
-                <RealTimeChart />
-              </Route>
-              <Route exact path={match.url + `addcoin`}>
-                <AddCoin />
-              </Route>
-              <Route exact path={match.url + `cards`}>
-                <PortfolioCards />
-              </Route>
-            </Switch>
+            <div className={classes.cenDiv}>
+              <Switch>
+                <Route exact path={match.url + `lightchart`}>
+                  <RealTimeChart />
+                </Route>
+                <Route exact path={match.url + `addcoin`}>
+                  <AddCoin />
+                </Route>
+                <Route exact path={match.url + `cards`}>
+                  <PortfolioCards />
+                </Route>
+              </Switch>
+            </div>
           </Box>
         </Box>
       </Box>

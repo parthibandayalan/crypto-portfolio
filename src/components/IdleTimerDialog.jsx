@@ -27,7 +27,7 @@ export default function IdleTimerDialog() {
   const onIdle = () => {
     console.log("User is idle");
     setOpen(true);
-    sessionTimeoutRef.current = setTimeout(logOut, 5000);
+    sessionTimeoutRef.current = setTimeout(logOut, 60 * 1000);
   };
 
   const logOut = () => {
@@ -49,7 +49,7 @@ export default function IdleTimerDialog() {
   return (
     <div>
       {isLoggedIn && (
-        <IdleTimer ref={idleTimerRef} timeout={1000 * 5} onIdle={onIdle} />
+        <IdleTimer ref={idleTimerRef} timeout={1000 * 60} onIdle={onIdle} />
       )}
       <Dialog open={open} onClose={stayActive}>
         <DialogTitle id="alert-dialog-title">

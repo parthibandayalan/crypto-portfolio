@@ -1,5 +1,4 @@
 import axios from "axios";
-import PortfolioCards from "../components/PortfolioCards";
 
 //const API_URL = "http://localhost:8080";
 const API_URL = process.env.REACT_APP_API_URL;
@@ -24,6 +23,8 @@ export function addCoinToDb(coinInfo) {
     coin: coinInfo.coin,
     tokens: coinInfo.tokens,
     username: coinInfo.username,
+    id: coinInfo.id,
+    image: coinInfo.image,
   };
 
   return instance

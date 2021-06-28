@@ -1,14 +1,8 @@
 import axios from "axios";
 
-export default async function getHistoricalData(symbol) {
+export async function getHistoricalData(symbol) {
   const pairing = symbol + "USDT";
-
-  //https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=1000
-  //axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
-
-  const instance = axios.create({
-    baseURL: "http://localhost:8080",
-  });
+  const instance = axios.create();
 
   return instance
     .get(`https://api.binance.com/api/v3/klines`, {
@@ -21,8 +15,6 @@ export default async function getHistoricalData(symbol) {
           value: parseFloat(d[1]),
         };
       });
-      //console.log("immediatly after fetching from api : ");
-      //console.log(cdata);
       return cdata;
     })
     .catch((error) => {
@@ -33,12 +25,11 @@ export default async function getHistoricalData(symbol) {
 export async function getAveragePrice(symbol) {
   const pairing = symbol + "USDT";
 
-  //https://api.binance.com/api/v3/klines?symbol=ETHUSDT&interval=1d&limit=1000
-  //axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+  // const instance = axios.create({
+  //   baseURL: "http://localhost:8080",
+  // });
 
-  const instance = axios.create({
-    baseURL: "http://localhost:8080",
-  });
+  const instance = axios.create();
 
   return instance
     .get(`https://api.binance.com/api/v3/avgPrice`, {
@@ -51,4 +42,17 @@ export async function getAveragePrice(symbol) {
     .catch((error) => {
       throw "Invalid Symbol " + JSON.stringify(error);
     });
+}
+
+export async function getCoinDetails(id) {
+  const instance = axios.create({
+    baseURL: "https://api.coingecko.com/api/v3",
+  });
+
+  return instance.get(`/coins/markets`, {
+    params: {
+      vs_currency: "usd",
+      ids: id,
+    },
+  });
 }

@@ -11,13 +11,13 @@ const intialState = {
 export default (state = intialState, action) => {
   switch (action.type) {
     case ADD_COIN:
-      let { symbol, token } = action;
+      let { symbol, token, id, image } = action;
       //console.log("ADD COIN Reducer " + symbol + " " + token);
       //const newMap = state.coins.set(symbol, token);
       var newState = {
         coins: { ...state.coins },
       };
-      newState.coins[symbol] = token;
+      newState.coins[symbol] = { token, id, image };
       return newState;
     case REMOVE_COIN:
       delete state.coins[action.symbol];
@@ -32,16 +32,18 @@ export default (state = intialState, action) => {
   }
 };
 
-export const checkCoin = (symbol, token) => ({
+export const checkCoin = (id, token) => ({
   type: CHECK_COIN,
-  symbol,
+  id,
   token,
 });
 
-export const addCoin = (symbol, token) => ({
+export const addCoin = (symbol, token, id, image) => ({
   type: ADD_COIN,
   symbol,
   token,
+  id,
+  image,
 });
 
 export const removeCoin = (symbol) => ({

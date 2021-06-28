@@ -17,7 +17,8 @@ const useStyles = makeStyles(() => ({
 
 function App() {
   const classes = useStyles();
-
+  const API_URL = process.env.REACT_APP_API_URL;
+  console.log(API_URL);
   return (
     <div className="App">
       <Snackbar />

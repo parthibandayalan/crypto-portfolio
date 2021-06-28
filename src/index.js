@@ -6,8 +6,15 @@ import reportWebVitals from "./reportWebVitals";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { Provider } from "react-redux";
 import store from "./redux/ConfigureStore";
+import { teal, amber, red } from "@material-ui/core/colors";
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  palette: {
+    primary: teal,
+    secondary: amber,
+    error: red,
+  },
+});
 
 ReactDOM.render(
   <Provider store={store}>

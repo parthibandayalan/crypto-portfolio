@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Chart from "./Chart";
+import Chart from "../components/Chart";
 import { withStyles } from "@material-ui/core/styles";
 import { Card } from "@material-ui/core";
 import { compose } from "recompose";

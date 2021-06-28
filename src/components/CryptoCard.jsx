@@ -8,8 +8,9 @@ import {
   CardHeader,
   Typography,
   Grid,
+  Avatar,
 } from "@material-ui/core";
-import { getAveragePrice } from "../services/BinanceHistoryDataAPI";
+import { getAveragePrice } from "../services/CryptoAPIService";
 import { setTrigger } from "../redux/ducks/Trigger";
 
 const useStyles = makeStyles((theme) => ({
@@ -17,11 +18,12 @@ const useStyles = makeStyles((theme) => ({
     height: 200,
     width: 250,
   },
+  avatar: {},
 }));
 
 export default function CryptoCard(props) {
   const classes = useStyles();
-  const { symbol, tokens } = props;
+  const { symbol, tokens, id, image } = props.details;
 
   const title = symbol + "-USD";
 
@@ -40,12 +42,18 @@ export default function CryptoCard(props) {
         dispatch(setTrigger());
       })
       .catch((err) => console.log(err));
-  }, 1000);
+  }, 2000);
 
   return (
     <Grid item xs={12} sm={6} md={4}>
       <Card className={classes.card}>
-        <CardHeader title={title} />
+        <CardHeader
+          aria-label="recipe"
+          titleTypographyProps={{ variant: "h4" }}
+          title={id.charAt(0).toUpperCase() + id.slice(1)}
+          subheader={title}
+          avatar={<Avatar className={classes.avatar} alt={id} src={image} />}
+        />
         <CardContent>
           <Typography>
             Rate :{" "}
