@@ -10,16 +10,16 @@ Realtime Portfolio Tracker for Crypto-Currency
 ### Frontend
 ReactJs, Material-UI, Redux-Saga, Javascript.
 
-###Backend
+### Backend
 Spring, Spring Boot, Spring Data JPA, MongoDB, Map Struct.
 
-##Screenshots
+## Screenshots
 
-###LoginPage
+### LoginPage
 ![LoginPage](screenshots/dashboard.JPG)
 
-###Registration
+### Registration
 ![Registration](screenshots/registration.JPG)
 
-###Dashboard
+### Dashboard
 ![Dashboard](screenshots/dashboard.JPG)
